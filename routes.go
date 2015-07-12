@@ -2,7 +2,9 @@ package main
 
 import (
 	"github.com/cryptojuice/cocwarz/handlers"
+	"github.com/cryptojuice/cocwarz/handlers/attackers"
 	"github.com/cryptojuice/cocwarz/handlers/clans"
+	"github.com/cryptojuice/cocwarz/handlers/targets"
 	"github.com/cryptojuice/cocwarz/handlers/wars"
 	"github.com/julienschmidt/httprouter"
 	"github.com/justinas/alice"
@@ -48,14 +50,14 @@ var routes = Routes{
 		warHandler.Index,
 	},
 	Route{
-		"GET",
-		"/wars/:warId",
-		warHandler.Show,
-	},
-	Route{
 		"POST",
 		"/wars",
 		warHandler.Create,
+	},
+	Route{
+		"GET",
+		"/wars/:warId",
+		warHandler.Show,
 	},
 	Route{
 		"PUT",
@@ -67,18 +69,39 @@ var routes = Routes{
 		"/wars/:warId",
 		warHandler.Destroy,
 	},
+	Route{
+		"GET",
+		"/wars/:warId/targets",
+		targetHandler.Index,
+	},
+	Route{
+		"POST",
+		"/wars/:warId/targets",
+		targetHandler.Create,
+	},
+	Route{
+		"PUT",
+		"/wars/:warId/targets/:targetId",
+		targetHandler.Update,
+	},
+	Route{
+		"GET",
+		"/wars/:warId/targets/:targetId/attackers",
+		attackerHandler.Index,
+	},
+	Route{
+		"POST",
+		"/wars/:warId/targets/:targetId/attackers",
+		attackerHandler.Create,
+	},
+	Route{
+		"PUT",
+		"/wars/:warId/targets/:targetId/attackers/:attackerId",
+		attackerHandler.Update,
+	},
+	Route{
+		"DELETE",
+		"/wars/:warId/targets/:targetId/attackers/:attackerId",
+		attackerHandler.Destroy,
+	},
 }
-
-// GET    "/wars"        Get Wars
-// POST   "/wars"        Create War
-// PUT    "/wars/:warId" Update War
-// DELETE "/wars/:warId" Delete War
-
-// GET  "/wars/:warId/targets"           Get War Targets
-// POST "/wars/:warId/targets"           Create Target
-// PUT  "/wars/:warId/targets/:targetId" Update Target
-
-// GET    "/wars/:warId/targets/:targetId/attackers"
-// POST   "/wars/:warId/targets/:targetId/attackers"
-// PUT    "/wars/:warId/targets/:targetId/attackers/:attackerId"
-// DELETE "/wars/:warId/targets/:targetId/attackers/:attackerId"

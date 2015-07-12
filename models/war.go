@@ -10,16 +10,3 @@ type War struct {
 	Size          int           `json:"size" bson: "size"`
 	Target        []Target
 }
-
-type Target struct {
-	Id       bson.ObjectId
-	Name     string
-	Called   bool
-	Attacker []Attacker
-}
-
-type Attacker struct {
-	Id           bson.ObjectId
-	AttackerName string
-	stars        int
-}
