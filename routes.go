@@ -24,7 +24,7 @@ type Route struct {
 type Routes []Route
 
 func NewRouter() *httprouter.Router {
-	commonHandlers := alice.New(handlers.LoggingHandler)
+	commonHandlers := alice.New(handlers.LoggingMiddleware, handlers.CORSMiddleware)
 	router := httprouter.New()
 
 	for _, route := range routes {
@@ -39,69 +39,20 @@ var targetHandler = targets.NewTargetHandler(getSession())
 var attackerHandler = attackers.NewAttackerHandler(getSession())
 
 var routes = Routes{
-	Route{
-		"GET",
-		"/",
-		handlers.IndexHandler,
-	},
-	Route{
-		"GET",
-		"/wars",
-		warHandler.Index,
-	},
-	Route{
-		"POST",
-		"/wars",
-		warHandler.Create,
-	},
-	Route{
-		"GET",
-		"/wars/:warId",
-		warHandler.Show,
-	},
-	Route{
-		"PUT",
-		"/wars/:warId",
-		warHandler.Update,
-	},
-	Route{
-		"DELETE",
-		"/wars/:warId",
-		warHandler.Destroy,
-	},
-	Route{
-		"GET",
-		"/wars/:warId/targets",
-		targetHandler.Index,
-	},
-	Route{
-		"POST",
-		"/wars/:warId/targets",
-		targetHandler.Create,
-	},
-	Route{
-		"PUT",
-		"/wars/:warId/targets/:targetId",
-		targetHandler.Update,
-	},
-	Route{
-		"GET",
-		"/wars/:warId/targets/:targetId/attackers",
-		attackerHandler.Index,
-	},
-	Route{
-		"POST",
-		"/wars/:warId/targets/:targetId/attackers",
-		attackerHandler.Create,
-	},
-	Route{
-		"PUT",
-		"/wars/:warId/targets/:targetId/attackers/:attackerId",
-		attackerHandler.Update,
-	},
-	Route{
-		"DELETE",
-		"/wars/:warId/targets/:targetId/attackers/:attackerId",
-		attackerHandler.Destroy,
-	},
+	Route{"GET", "/", handlers.IndexHandler},
+
+	Route{"GET", "/wars", warHandler.Index},
+	Route{"POST", "/wars", warHandler.Create},
+	Route{"GET", "/wars/:id", warHandler.Show},
+	Route{"PUT", "/wars/:id", warHandler.Update},
+	Route{"DELETE", "/wars/:id", warHandler.Destroy},
+
+	Route{"GET", "/wars/:id/targets", targetHandler.Index},
+	Route{"POST", "/wars/:id/targets", targetHandler.Create},
+	Route{"PUT", "/wars/:id/targets/:targetId", targetHandler.Update},
+
+	Route{"GET", "/wars/:id/targets/:targetId/attackers", attackerHandler.Index},
+	Route{"POST", "/wars/:id/targets/:targetId/attackers", attackerHandler.Create},
+	Route{"PUT", "/wars/:id/targets/:targetId/attackers/:attackerId", attackerHandler.Update},
+	Route{"DELETE", "/wars/:id/targets/:targetId/attackers/:attackerId", attackerHandler.Destroy},
 }
