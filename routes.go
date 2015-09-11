@@ -2,7 +2,10 @@ package main
 
 import (
 	"github.com/cryptojuice/cocwarz/handlers"
+	"github.com/cryptojuice/cocwarz/handlers/attackers"
 	"github.com/cryptojuice/cocwarz/handlers/clans"
+	"github.com/cryptojuice/cocwarz/handlers/targets"
+	"github.com/cryptojuice/cocwarz/handlers/wars"
 	"github.com/julienschmidt/httprouter"
 	"github.com/justinas/alice"
 	"net/http"
@@ -21,7 +24,7 @@ type Route struct {
 type Routes []Route
 
 func NewRouter() *httprouter.Router {
-	commonHandlers := alice.New(handlers.LoggingHandler)
+	commonHandlers := alice.New(handlers.LoggingMiddleware, handlers.CORSMiddleware)
 	router := httprouter.New()
 
 	for _, route := range routes {
@@ -30,17 +33,14 @@ func NewRouter() *httprouter.Router {
 	return router
 }
 
-var clanHandler = clans.NewClanHandler(getSession())
+var warHandler = wars.NewWarHandler(getSession())
 
 var routes = Routes{
-	Route{
-		"GET",
-		"/",
-		handlers.IndexHandler,
-	},
-	Route{
-		"POST",
-		"/clans",
-		clanHandler.Create,
-	},
+	Route{"GET", "/", handlers.IndexHandler},
+
+	Route{"GET", "/wars", warHandler.Index},
+	Route{"POST", "/wars", warHandler.Create},
+	Route{"GET", "/wars/:id", warHandler.Show},
+	Route{"PUT", "/wars/:id", warHandler.Update},
+	Route{"DELETE", "/wars/:id", warHandler.Destroy},
 }
