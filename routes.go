@@ -33,10 +33,7 @@ func NewRouter() *httprouter.Router {
 	return router
 }
 
-var clanHandler = clans.NewClanHandler(getSession())
 var warHandler = wars.NewWarHandler(getSession())
-var targetHandler = targets.NewTargetHandler(getSession())
-var attackerHandler = attackers.NewAttackerHandler(getSession())
 
 var routes = Routes{
 	Route{"GET", "/", handlers.IndexHandler},
@@ -46,13 +43,4 @@ var routes = Routes{
 	Route{"GET", "/wars/:id", warHandler.Show},
 	Route{"PUT", "/wars/:id", warHandler.Update},
 	Route{"DELETE", "/wars/:id", warHandler.Destroy},
-
-	Route{"GET", "/wars/:id/targets", targetHandler.Index},
-	Route{"POST", "/wars/:id/targets", targetHandler.Create},
-	Route{"PUT", "/wars/:id/targets/:targetId", targetHandler.Update},
-
-	Route{"GET", "/wars/:id/targets/:targetId/attackers", attackerHandler.Index},
-	Route{"POST", "/wars/:id/targets/:targetId/attackers", attackerHandler.Create},
-	Route{"PUT", "/wars/:id/targets/:targetId/attackers/:attackerId", attackerHandler.Update},
-	Route{"DELETE", "/wars/:id/targets/:targetId/attackers/:attackerId", attackerHandler.Destroy},
 }
